@@ -12,5 +12,11 @@ const generateAccessToken = (user) => {
     { expiresIn: "15m" }
   );
 };
-module.exports = { generateAccessToken };
+
+// verify a given accessToken
+const verifyToken = (token) => {
+  return jwt.verify(token, process.env.access_Token_private_key);
+};
+// refreshToken
+module.exports = { generateAccessToken, verifyToken };
 //

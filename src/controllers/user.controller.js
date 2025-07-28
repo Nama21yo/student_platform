@@ -7,7 +7,8 @@ class UserController {
     // we validate the data
     try {
       console.log("request body", req.body);
-
+      // abcd1234yweruweuq => hash => database
+      // compare
       const { accessToken, dataToDatabase } = await userService.signup(
         req.body
       );
@@ -21,6 +22,25 @@ class UserController {
       res.status(400).json({
         message: error.message,
       });
+    }
+  };
+
+  login = async (req, res) => {
+    try {
+      console.log("Login Data", req.body);
+      const { accessToken, currentUser } = await userService.login(req.body);
+      res.status(200).json({ accessToken, currentUser });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
+
+  getAllUsers = async (req, res) => {
+    try {
+      const users = await userService.getAllUsers();
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   };
 }

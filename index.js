@@ -9,6 +9,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 // middlewares
 app.use(express.json()); // to json format
+// app.use()
 // app.use(logger);
 
 // api-versioning

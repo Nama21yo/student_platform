@@ -29,7 +29,14 @@ class UserService {
     });
 
     console.log("Data saved", dataToDatabase);
+    // abcd1234ghsfdhkfasjbkfj
+    // a6GYntSzVidZ9uM9k1ml2e0q.2J8mKeO8W2uEuS8j3BIWB7jxNlvi
+    // salt => a6GYntSzVidZ9uM9k1ml2e0q
+    // 10 => cost factor
 
+    // abcd1234
+    // a6GYntSzVidZ9uM9k1ml2e0q.2J8mKeO8W2uEuS8j3BIWB7jxNlvi
+    // bcrypt.compare
     // generate accessToken
     const accessToken = jwtProvider.generateAccessToken(dataToDatabase);
     // generate refreshToken
@@ -39,10 +46,34 @@ class UserService {
     };
   }
 
-  // signin
+  // signin / login
+  async login(data) {
+    // email, password
+    const { email, password } = data;
+    const currentUser = await userRepository.findUserbyEmail(email);
+
+    if (!currentUser) {
+      // is user is undefined
+      throw new Error("User doesn't exist. Please SignUp");
+    }
+
+    const checkPassword = await bcrypt.compare(password, currentUser.password);
+
+    if (!checkPassword) {
+      throw new Error("User password incorrect");
+    }
+
+    const accessToken = jwtProvider.generateAccessToken(currentUser);
+
+    return { accessToken, currentUser };
+  }
+
   // logout
 
   // get all users
+  async getAllUsers() {
+    return await userRepository.readAllUsers();
+  }
   // update user
   // delete user
 }
